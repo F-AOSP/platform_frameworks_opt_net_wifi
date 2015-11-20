@@ -1394,8 +1394,10 @@ public final class WifiServiceImpl extends IWifiManager.Stub {
                         BluetoothAdapter.STATE_DISCONNECTED);
                 mWifiStateMachine.sendBluetoothAdapterStateChange(state);
             } else if (action.equals(TelephonyIntents.ACTION_EMERGENCY_CALLBACK_MODE_CHANGED)) {
-                boolean emergencyMode = intent.getBooleanExtra("phoneinECMState", false);
-                mWifiController.sendMessage(CMD_EMERGENCY_MODE_CHANGED, emergencyMode ? 1 : 0, 0);
+                if (mContext.getResources().getBoolean(R.bool.config_wifi_ecbm_mode_change)) {
+                    boolean emergencyMode = intent.getBooleanExtra("phoneinECMState", false);
+                    mWifiController.sendMessage(CMD_EMERGENCY_MODE_CHANGED, emergencyMode ? 1 : 0, 0);
+                }
             } else if (action.equals(TelephonyIntents.ACTION_EMERGENCY_CALL_STATE_CHANGED)) {
                 boolean inCall = intent.getBooleanExtra(PhoneConstants.PHONE_IN_EMERGENCY_CALL, false);
                 mWifiController.sendMessage(CMD_EMERGENCY_CALL_STATE_CHANGED, inCall ? 1 : 0, 0);
